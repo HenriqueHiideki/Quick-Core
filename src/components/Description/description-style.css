@@ -1,0 +1,13 @@
+.description-title{
+    font-size: 34px;
+    margin: 0;
+}
+
+.description-text{
+    font-size: 18px;
+    color: var(--neutral-color);
+}
+
+.content-title{
+    margin: 32px 0 0 48px;
+}
