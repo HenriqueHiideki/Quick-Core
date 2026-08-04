@@ -1,23 +1,13 @@
 import './App.css'
-import { ButtonCreatePoll } from './components/Button'
-import { UserIcon } from './components/UserIcon'
-import { SearchBar } from './components/SearchBar'
-import { Title } from './components/Title'
+import { SideBar } from './components/SideBar/SideBar'
+import { Header } from './components/Header/header'
 
 function App() {
   return(
     <main>
-      <header>
-        <img src="/quick-core-logo.png" alt="icone do quick core" className="logo" />
-        <Title>Quick Core</Title>
-        <SearchBar>Pesquise Enquetes, tópicos ou criadores...</SearchBar>
-        <ButtonCreatePoll>Create Poll</ButtonCreatePoll>
-        <UserIcon></UserIcon>
-        
-      </header>
-
+      <Header />
       <section>
-
+        <SideBar/>
       </section>
     </main>
   )

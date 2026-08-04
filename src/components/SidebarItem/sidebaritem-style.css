@@ -1,0 +1,6 @@
+.sidebar-img{
+    height: 35px;
+    width: 35px;
+    display: flex;
+    flex-direction: column;
+}

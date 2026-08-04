@@ -7,18 +7,7 @@
 
 body{
   font-family: Inter;
-}
-
-header{
-  background-color: #ffffff;
-  display: flex;
-  align-items: center;
   margin: 0;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  height: 90px;
+  padding: 0;
 }
 
-.logo{
-  width: 45px;
-  height: 45px;
-}
