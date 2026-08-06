@@ -1,0 +1,40 @@
+.button-img {
+  height: 20px;
+  width: 20px;
+}
+
+.button-img-hover {
+  height: 20px;
+  width: 20px;
+}
+
+.filter-tab-button {
+  background-color: #dae2f2;
+  padding: 15px 30px;
+  color: var(--neutral-color);
+  border: none;
+  border-radius: 30px;
+  font-family: Inter;
+  font-size: 20px;
+  font-weight: 500;
+  height: 45px;
+  display: flex;
+  align-items: center;
+}
+
+.filter-tab-button .button-img-hover {
+  display: none;
+}
+
+.filter-tab-button:hover .button-img {
+  display: none;
+}
+
+.filter-tab-button:hover .button-img-hover {
+  display: inline-block;
+}
+
+.filter-tab-button:hover {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}

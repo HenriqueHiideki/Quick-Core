@@ -20,3 +20,9 @@ main{
   display: flex;
   flex-direction: row;
 }
+
+.container-cards{
+  display: flex;
+  gap: 10px;
+  margin: 32px 0 0 48px;
+}
