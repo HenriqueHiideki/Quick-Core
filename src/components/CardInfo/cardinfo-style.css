@@ -1,0 +1,45 @@
+.card-info{
+    background-color: #f5f5f5;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    width: 80%;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    border-radius: 10px;
+}
+
+.card-info-img{
+    background-color: #bed2fa;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    padding: 5px;
+}
+
+.card-info-resume{
+    font-size: 14px;
+}
+
+.card-info-data{
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.dashboard-content{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.dashboard-content > *:first-child{
+    flex: 1;
+}
+
+.cards-info-container{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 260px;
+}

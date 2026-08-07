@@ -21,3 +21,13 @@
   height: 20px;
   width: 20px;
 }
+
+.dashboard-description{
+  color: var(--primary-color);
+  font-weight: 600
+}
+
+.dashboard-description-text{
+  color: var(--neutral-color);
+  font-weight: 600;
+}
