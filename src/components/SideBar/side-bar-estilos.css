@@ -1,11 +1,12 @@
 .sidebar{
     height: 90vh;
-    width: 300px;
+    width: 280px;
     background-color: #f5f5f5;
-    padding: 20px;
+    padding: 24px 20px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    border-right: 1px solid #e5e7eb;
 }
 
 .SideBarList{
@@ -13,32 +14,34 @@
     padding: 0;
     width: 100%;
     margin: 0;
+    list-style-type: none;
 }
 
 .SideBarList .row{
     width: 100%;
     height: 60px;
     list-style-type: none;
-    margin: 0;
+    margin-bottom: 8px;
     display: flex;
     flex-direction: row;
     color: var(--neutral-color);
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    gap: 10px;
-    font-size: 17px;
+    gap: 16px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: all 0.2s;
 }
 
 
 .row #sidebar-img{
-    flex: 30%;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.row #title{
-    flex: 70%;
-}
 
 .SideBarList .row:hover{
     cursor: pointer;
@@ -47,15 +50,15 @@
 }
 
 .sidebar-title{
-    margin: 20px;
+    margin-bottom: 30px;
+    text-align: center;
 }
 
 .sidebar-footer{
-    margin-top: auto;
-    padding: 16px;
+    margin: auto 0 20px 20px;
     display: flex;
-    flex-direction: column;
     gap: 12px;
+    font-size: 14px;
 }
 
 

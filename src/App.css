@@ -19,10 +19,18 @@ main{
 .container-content{
   display: flex;
   flex-direction: row;
+
 }
 
 .container-cards{
   display: flex;
-  gap: 10px;
-  margin: 32px 0 0 48px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 32px 24px 0 48px;
+}
+
+.content{
+  background-color: #f7f8ff;
+  width: 100%;
 }
