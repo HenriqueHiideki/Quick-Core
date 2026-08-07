@@ -11,3 +11,13 @@
 .content-title{
     margin: 32px 0 0 48px;
 }
+
+.button-img {
+  height: 20px;
+  width: 20px;
+}
+
+.button-img-hover {
+  height: 20px;
+  width: 20px;
+}
