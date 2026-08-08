@@ -3,3 +3,8 @@
     margin: 0;
     text-align: center;
 }
+
+.title-votes{
+    font-weight: 600;
+    font-size: 20px;
+}
