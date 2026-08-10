@@ -5,6 +5,7 @@ import { Dashboard } from "./pages/Dashboard/Dashboard"
 import { Vote } from "./pages/Vote/Vote"
 import { Settings } from "./pages/Settings/Settings"
 import { Login } from "./pages/Login/Login"
+import { Register } from "./pages/Register/Register"
 
 function App() {
   return(
@@ -19,6 +20,7 @@ function App() {
 
       {/* ROTAS DO SISTEMA QUE NAO USAM O <MainLayout> */}
       <Route path="/login" element={<Login />} />
+      <Route path="register" element={<Register />} />
     </Routes>
   )
 }
