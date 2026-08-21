@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model options {
+  id          Int     @id
+  poll_id     Int?
+  option_text String  @db.VarChar
+  polls       polls?  @relation(fields: [poll_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_options_poll")
+  votes       votes[]
+}
+
+model polls {
+  id         Int       @id
+  question   String    @db.VarChar
+  created_in DateTime? @default(now()) @db.Timestamp(6)
+  user_id    Int
+  options    options[]
+  users      users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  votes      votes[]
+}
+
+model users {
+  id           Int       @id @default(autoincrement())
+  name         String    @db.VarChar(255)
+  email        String?   @unique(map: "users_email_unique") @db.VarChar(255)
+  status       String?   @db.VarChar(20)
+  access_level String?   @db.VarChar(20)
+  created_in   DateTime? @db.Timestamp(6)
+  password     String?   @db.VarChar(255)
+  polls        polls[]
+  votes        votes[]
+}
+
+model votes {
+  id        Int     @id
+  user_id   Int
+  option_id Int
+  poll_id   Int?
+  options   options @relation(fields: [option_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_votes_option")
+  polls     polls?  @relation(fields: [poll_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_votes_poll")
+  users     users   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([user_id, poll_id], map: "regra_voto_unico_usuario_enquete")
+}

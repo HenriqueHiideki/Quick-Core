@@ -1,4 +1,4 @@
-# Logs
+
 logs
 *.log
 npm-debug.log*
@@ -12,7 +12,6 @@ dist
 dist-ssr
 *.local
 
-# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -23,25 +22,44 @@ dist-ssr
 *.sln
 *.sw?
 
-# Variáveis de ambiente
 .env
 .env.local
 .env.*.local
 
-# Dependências
 node_modules/
 
-# Build
 dist/
 dist-ssr/
 build/
 
-# Editor
 .vscode/*
 !.vscode/extensions.json
 .idea/
 .DS_Store
 
-# Logs
 *.log
 npm-debug.log*
+
+/src/generated/prisma
+
+node_modules/
+**/node_modules/
+
+.env
+**/.env
+.env.*
+!.env.example
+
+dist/
+**/dist/
+build/
+**/build/
+
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+.agents/
+.claude/
+.windsurf/
