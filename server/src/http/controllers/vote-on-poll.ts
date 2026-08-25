@@ -2,6 +2,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
 import { prisma } from "../../lib/prisma";
 import { Prisma } from "@prisma/client";
+import { voting } from "../../utils/voting-pub-sub";
 
 export async function voteOnPoll(request: FastifyRequest, reply: FastifyReply) {
   const voteOnPollParams = z.object({
@@ -35,7 +36,16 @@ export async function voteOnPoll(request: FastifyRequest, reply: FastifyReply) {
         poll_id: pollId,
         option_id,
       },
-    });
+    })
+
+    const votesCount = await prisma.votes.count({
+      where: { option_id },
+    })
+
+    voting.publish(pollId, {
+      optionId: option_id,
+      votes: votesCount
+    })
 
     return reply.status(201).send({ message: "Voto registrado com sucesso!" });
   } catch (error) {
