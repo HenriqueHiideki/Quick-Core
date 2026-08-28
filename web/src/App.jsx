@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, Navigate } from "react-router-dom"
 import { MainLayout } from "./layouts/MainLayout/MainLayout"
 import { Home } from "./pages/Home/Home"
 import { Dashboard } from "./pages/Dashboard/Dashboard"
@@ -8,9 +8,11 @@ import { Login } from "./pages/Login/Login"
 import { Register } from "./pages/Register/Register"
 
 function App() {
-  return(
+  return (
     <Routes>
-      {/* ROTAS DO SISTEMA QUE USAM O COMPONENTE <MainLayout> */}
+      <Route path="/" element={<Navigate to="/home" replace />} />
+
+      {/* ROTAS COM MAINLAYOUT */}
       <Route element={<MainLayout />}>
         <Route path="/home" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -18,9 +20,9 @@ function App() {
         <Route path="/settings" element={<Settings />} />
       </Route>
 
-      {/* ROTAS DO SISTEMA QUE NAO USAM O <MainLayout> */}
+      {/* ROTAS SEM MAINLAYOUT */}
       <Route path="/login" element={<Login />} />
-      <Route path="register" element={<Register />} />
+      <Route path="/register" element={<Register />} />
     </Routes>
   )
 }
