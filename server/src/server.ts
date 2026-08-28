@@ -13,6 +13,7 @@ const app = Fastify()
 
 app.register(cors, {
   origin: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 })
 
 app.register(websocket)

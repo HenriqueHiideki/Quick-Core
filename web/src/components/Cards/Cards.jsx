@@ -2,24 +2,40 @@ import { ProgressBar } from '../ProgressBar/PorgressBar'
 import './cards-style.css'
 import { CardText } from './CardsText'
 
-export function Cards(props){
-    return(
-        <div className='cards'>
-            <img src="icon-dot.png" className='card-img' />
-            <CardText>{props.children}</CardText>
-            <ProgressBar label="Java" percentage={58} />
-            <ProgressBar label="C#" percentage={32} />
-            <hr className='card-line' />
+export function Cards({ poll, children }) {
+  const totalVotes = poll?.options?.reduce((acc, option) => {
+    return acc + (option.votes || 0)
+  }, 0) || 0
 
-            <div className='footer-item'>
-                <img src="icon-votes.png" alt="Votos" className='card-img' />
-                <span>1.240 votos</span>
-            </div>
+  return (
+    <div className='cards'>
+      <img src="icon-dot.png" className='card-img' alt="Opções" />
+      <CardText>{children}</CardText>
 
-            <div className='footer-item time'>
-                <img src="icon-watch.png" alt="Tempo" className='card-img' />
-                <span>Termina em 2 dias</span>
-            </div>
-        </div>
-    )
+      {poll?.options?.map((option) => {
+        const optionVotes = option.votes || 0
+        const percentage = totalVotes > 0 ? Math.round((optionVotes / totalVotes) * 100) : 0
+
+        return (
+          <ProgressBar
+            key={option.id}
+            label={option.option_text}
+            percentage={percentage}
+          />
+        )
+      })}
+
+      <hr className='card-line' />
+
+      <div className='footer-item'>
+        <img src="icon-votes.png" alt="Votos" className='card-img' />
+        <span>{totalVotes.toLocaleString('pt-BR')} votos</span>
+      </div>
+
+      <div className='footer-item time'>
+        <img src="icon-watch.png" alt="Tempo" className='card-img' />
+        <span>Ativa</span>
+      </div>
+    </div>
+  )
 }
