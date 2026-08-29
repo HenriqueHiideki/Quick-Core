@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./home-style.css";
 import { DescriptionTitle } from "../../components/Description/DescriptionTitle";
 import { FilterTabs } from "../../components/FilterTabs/FilterTabs";
@@ -9,6 +9,7 @@ export function Home() {
   const [polls, setPolls] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const socketsRef = useRef([]);
 
   useEffect(() => {
     getPolls()
@@ -24,6 +25,43 @@ export function Home() {
         setIsLoading(false);
       });
   }, []);
+
+  // Conecta um WebSocket por enquete listada, pra atualizar os cards em tempo real
+  useEffect(() => {
+    socketsRef.current.forEach((ws) => ws.close());
+    socketsRef.current = [];
+
+    if (polls.length === 0) return;
+
+    const sockets = polls.map((poll) => {
+      const ws = new WebSocket(`ws://localhost:3333/polls/${poll.id}/results`);
+
+      ws.onmessage = (event) => {
+        const { optionId, votes } = JSON.parse(event.data);
+
+        setPolls((prevPolls) =>
+          prevPolls.map((p) =>
+            p.id !== poll.id
+              ? p
+              : {
+                  ...p,
+                  options: p.options.map((option) =>
+                    option.id === optionId ? { ...option, votes } : option
+                  ),
+                }
+          )
+        );
+      };
+
+      return ws;
+    });
+
+    socketsRef.current = sockets;
+
+    return () => {
+      sockets.forEach((ws) => ws.close());
+    };
+  }, [polls.length]);
 
   return (
     <>

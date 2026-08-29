@@ -17,7 +17,7 @@ function App() {
       <Route element={<MainLayout />}>
         <Route path="/home" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/vote" element={<Vote />} />
+        <Route path="/vote/:id" element={<Vote />} />
         <Route path="/settings" element={<Settings />} />
 
         <Route path="/create-poll" element={<CreatePoll />} />

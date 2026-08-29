@@ -36,12 +36,13 @@ export async function deletePoll(pollId: string) {
   if (!response.ok) throw new Error('Erro ao deletar enquete.')
 }
 
-export async function createPoll(question: string, options: string[]) {
+export async function createPoll(question: string, options: string[], userId: number = 1) {
   const response = await fetch(`${API_BASE_URL}/polls`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      title: question,
+      question: question,
+      user_id: userId,
       options: options,
     }),
   })

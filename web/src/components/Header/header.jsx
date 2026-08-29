@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import "./header-style.css";
 import { Title } from "../Title/Title";
 import { ButtonCreatePoll } from "../Button/Button-Create-Poll";
@@ -5,6 +6,8 @@ import { UserIcon } from "../UserIcon/UserIcon";
 import { SearchBar } from "../SearchBar/Search-Bar";
 
 export function Header() {
+  const navigate = useNavigate();
+
   return (
     <header>
       <div className="header-container">
@@ -17,7 +20,9 @@ export function Header() {
       </div>
       <SearchBar>Pesquise Enquetes, tópicos ou criadores...</SearchBar>
       <div className="header-container">
-        <ButtonCreatePoll>Create Poll</ButtonCreatePoll>
+        <ButtonCreatePoll onClick={() => navigate("/create-poll")}>
+          Create Poll
+        </ButtonCreatePoll>
         <UserIcon></UserIcon>
       </div>
     </header>

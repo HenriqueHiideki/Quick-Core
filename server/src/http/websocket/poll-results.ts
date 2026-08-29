@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
+import '@fastify/websocket'
 import { voting } from '../../utils/voting-pub-sub'
 
 export async function pollResults(app: FastifyInstance) {
@@ -9,9 +10,9 @@ export async function pollResults(app: FastifyInstance) {
     })
 
     const { pollId } = getPollParams.parse(request.params)
-    
+
     voting.subscribe(pollId, (message) => {
-      connection.socket.send(JSON.stringify(message))
+      connection.send(JSON.stringify(message))
     })
   })
 }

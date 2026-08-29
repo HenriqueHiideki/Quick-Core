@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react'
+import { useParams } from 'react-router-dom'
 import { TitleVotes } from '../../components/Title/TitleVotes'
 import { getPoll, voteOnPoll } from '../../services/api'
 import './vote-style.css'
@@ -13,11 +13,10 @@ export function Vote() {
   const [isLoading, setIsLoading] = useState(true)
   const [feedback, setFeedback] = useState('')
 
-  // 1. Busca os dados da enquete na API REST
   useEffect(() => {
     getPoll(pollId)
       .then((data) => {
-        setPoll(data)
+        setPoll(data.poll)
       })
       .catch((err) => {
         setFeedback(err.message)
@@ -27,7 +26,6 @@ export function Vote() {
       })
   }, [pollId])
 
-  // 2. Conecta ao WebSocket para atualizações ao vivo
   useEffect(() => {
     const ws = new WebSocket(`ws://localhost:3333/polls/${pollId}/results`)
 
@@ -50,7 +48,6 @@ export function Vote() {
     }
   }, [pollId])
 
-  // 3. Submete o voto via HTTP POST
   const handleVoteSubmit = async () => {
     if (!selectedOptionId) {
       alert('Por favor, selecione uma opção antes de votar.')
@@ -67,23 +64,33 @@ export function Vote() {
 
   if (isLoading) return <p className="container-votes">Carregando enquete...</p>
 
+  const totalVotes = poll?.options?.reduce((acc, opt) => acc + (opt.votes || 0), 0) || 0
+
   return (
     <div className="container-votes">
       <TitleVotes>{poll?.question || 'Enquete não encontrada'}</TitleVotes>
 
       <div className="option-list">
-        {poll?.options?.map((option) => (
-          <label key={option.id} className="checkbox-option">
-            <input
-              type="radio"
-              name="poll-option"
-              value={option.id}
-              checked={selectedOptionId === option.id}
-              onChange={() => setSelectedOptionId(option.id)}
-            />
-            <span>{option.option_text}</span>
-          </label>
-        ))}
+        {poll?.options?.map((option) => {
+          const votes = option.votes || 0
+          const percentage = totalVotes > 0 ? Math.round((votes / totalVotes) * 100) : 0
+
+          return (
+            <label key={option.id} className="checkbox-option">
+              <input
+                type="radio"
+                name="poll-option"
+                value={option.id}
+                checked={selectedOptionId === option.id}
+                onChange={() => setSelectedOptionId(option.id)}
+              />
+              <span>{option.option_text}</span>
+              <span className="option-result">
+                {votes} {votes === 1 ? 'voto' : 'votos'} ({percentage}%)
+              </span>
+            </label>
+          )
+        })}
       </div>
 
       <button className="vote-button" onClick={handleVoteSubmit}>
@@ -91,6 +98,10 @@ export function Vote() {
       </button>
 
       {feedback && <p style={{ marginTop: '16px', fontWeight: 'bold' }}>{feedback}</p>}
+
+      <p style={{ marginTop: '8px', color: '#666' }}>
+        Total: {totalVotes} {totalVotes === 1 ? 'voto' : 'votos'}
+      </p>
     </div>
   )
 }

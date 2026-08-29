@@ -1,14 +1,17 @@
+import { useNavigate } from 'react-router-dom'
 import { ProgressBar } from '../ProgressBar/PorgressBar'
 import './cards-style.css'
 import { CardText } from './CardsText'
 
 export function Cards({ poll, children }) {
+  const navigate = useNavigate()
+
   const totalVotes = poll?.options?.reduce((acc, option) => {
     return acc + (option.votes || 0)
   }, 0) || 0
 
   return (
-    <div className='cards'>
+    <div className='cards' onClick={() => navigate(`/vote/${poll.id}`)}>
       <img src="icon-dot.png" className='card-img' alt="Opções" />
       <CardText>{children}</CardText>
 
