@@ -7,14 +7,22 @@ import "./dashboard.css";
 
 export function Dashboard() {
   const [polls, setPolls] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     getPolls()
       .then((data) => {
         const pollsList = Array.isArray(data) ? data : data.polls || [];
         setPolls(pollsList);
+        setError(null);
       })
-      .catch(console.error);
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const handleDeletePoll = async (id) => {
@@ -23,7 +31,7 @@ export function Dashboard() {
 
     try {
       await deletePoll(id);
-      setPolls(polls.filter((poll) => poll.id !== id));
+      setPolls((prev) => prev.filter((poll) => poll.id !== id));
     } catch (error) {
       alert(error.message);
     }
@@ -38,15 +46,20 @@ export function Dashboard() {
     <div>
       <DescriptionTitle>Minhas Enquetes</DescriptionTitle>
 
-      <div className="dashboard-content">
-        <Details polls={polls} onDelete={handleDeletePoll} />
+      {isLoading && <p>Carregando enquetes...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <div className="cards-info-container">
-          <CardInfo icon="/icon-up.png" label="Votos Totais" value={totalVotes.toString()} />
-          <CardInfo icon="/icon-verified.png" label="Enquetes abertas" value={polls.length.toString()} />
-          <CardInfo icon="/icon-watch-blue.png" label="Encerramento" value="7 dias" />
+      {!isLoading && !error && (
+        <div className="dashboard-content">
+          <Details polls={polls} onDelete={handleDeletePoll} />
+
+          <div className="cards-info-container">
+            <CardInfo icon="/icon-up.png" label="Votos Totais" value={totalVotes.toString()} />
+            <CardInfo icon="/icon-verified.png" label="Enquetes abertas" value={polls.length.toString()} />
+            <CardInfo icon="/icon-watch-blue.png" label="Encerramento" value="7 dias" />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
