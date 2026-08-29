@@ -6,6 +6,7 @@ import { Vote } from "./pages/Vote/Vote"
 import { Settings } from "./pages/Settings/Settings"
 import { Login } from "./pages/Login/Login"
 import { Register } from "./pages/Register/Register"
+import { CreatePoll } from "./pages/CreatePoll/CreatePoll"
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/vote" element={<Vote />} />
         <Route path="/settings" element={<Settings />} />
+
+        <Route path="/create-poll" element={<CreatePoll />} />
       </Route>
 
       {/* ROTAS SEM MAINLAYOUT */}

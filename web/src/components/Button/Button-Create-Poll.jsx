@@ -1,9 +1,9 @@
 import './button.estilos.css'
 
-export function ButtonCreatePoll(props){
-    return(
-        <button className='button-create-poll'>
-            {props.children}
-        </button>
-    )
+export function ButtonCreatePoll({ children, ...rest }) {
+  return (
+    <button className='button-create-poll' {...rest}>
+      {children}
+    </button>
+  )
 }
