@@ -11,11 +11,11 @@ export async function voteOnPoll(request: FastifyRequest, reply: FastifyReply) {
 
   const voteOnPollBody = z.object({
     option_id: z.number(),
-    user_id: z.number(),
   });
 
   const { pollId } = voteOnPollParams.parse(request.params);
-  const { option_id, user_id } = voteOnPollBody.parse(request.body);
+  const { option_id } = voteOnPollBody.parse(request.body);
+  const user_id = request.userId as number;
 
   const option = await prisma.options.findUnique({
     where: {

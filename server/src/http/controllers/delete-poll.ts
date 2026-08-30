@@ -8,6 +8,7 @@ export async function deletePoll(request: FastifyRequest, reply: FastifyReply){
     })
 
     const { pollId } = deletePollParams.parse(request.params)
+    const user_id = request.userId as number
 
     const poll = await prisma.polls.findUnique({
         where: { id: pollId },
@@ -15,6 +16,10 @@ export async function deletePoll(request: FastifyRequest, reply: FastifyReply){
 
     if (!poll) {
         return reply.status(404).send({ message: 'Enquete nao encontrada.'})
+    }
+
+    if (poll.user_id !== user_id) {
+        return reply.status(403).send({ message: 'Voce nao tem permissao para excluir esta enquete.' })
     }
 
     await prisma.polls.delete({
