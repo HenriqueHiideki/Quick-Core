@@ -12,13 +12,40 @@ export async function getPoll(pollId: string) {
   return response.json()
 }
 
-export async function voteOnPoll(pollId: string, optionId: number, userId: number = 1) {
+export async function createPoll(question: string, options: string[]) {
+  const token = localStorage.getItem('token')
+
+  const response = await fetch(`${API_BASE_URL}/polls`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      question: question,
+      options: options,
+    }),
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}))
+    throw new Error(errorData.message || 'Erro ao criar enquete.')
+  }
+
+  return response.json()
+}
+
+export async function voteOnPoll(pollId: string, optionId: number) {
+  const token = localStorage.getItem('token')
+
   const response = await fetch(`${API_BASE_URL}/polls/${pollId}/votes`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
     body: JSON.stringify({
       option_id: optionId,
-      user_id: userId,
     }),
   })
 
@@ -30,29 +57,15 @@ export async function voteOnPoll(pollId: string, optionId: number, userId: numbe
 }
 
 export async function deletePoll(pollId: string) {
+  const token = localStorage.getItem('token')
+
   const response = await fetch(`${API_BASE_URL}/polls/${pollId}`, {
     method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
   })
   if (!response.ok) throw new Error('Erro ao deletar enquete.')
-}
-
-export async function createPoll(question: string, options: string[], userId: number = 1) {
-  const response = await fetch(`${API_BASE_URL}/polls`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      question: question,
-      user_id: userId,
-      options: options,
-    }),
-  })
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}))
-    throw new Error(errorData.message || 'Erro ao criar enquete.')
-  }
-
-  return response.json()
 }
 
 export async function registerUser(name: string, email: string, password: string) {

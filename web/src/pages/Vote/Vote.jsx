@@ -55,7 +55,7 @@ export function Vote() {
     }
 
     try {
-      await voteOnPoll(pollId, selectedOptionId, 1)
+      await voteOnPoll(pollId, selectedOptionId)
       setFeedback('Voto registrado com sucesso!')
     } catch (err) {
       setFeedback(err.message)

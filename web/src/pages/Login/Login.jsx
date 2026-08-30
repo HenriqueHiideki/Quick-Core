@@ -1,10 +1,43 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { DescriptionText } from "../../components/Description/DescriptionText";
 import { Title } from "../../components/Title/Title";
 import { FormField } from "../../components/FormField/FormField";
 import { ButtonCreatePoll } from "../../components/Button/Button-Create-Poll";
+import { useAuth } from "../../contexts/AuthContext";
+import { loginUser } from "../../services/api";
 import "./login-style.css";
 
 export function Login() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email.trim() || !password.trim()) {
+      setError("Preencha e-mail e senha.");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError("");
+
+      const data = await loginUser(email, password);
+      login(data.user, data.token);
+
+      navigate("/home");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="login-page">
       <div className="login-content">
@@ -25,17 +58,23 @@ export function Login() {
             label="E-mail"
             type="email"
             placeholder="Digite seu e-mail"
-            helperText="Esqueceu seu e-mail?"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <FormField
             label="Senha"
             type="password"
             placeholder="Digite sua senha"
-            helperText="Esqueceu sua senha?"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
+          {error && <p style={{ color: "red", marginTop: "8px" }}>{error}</p>}
+
           <div className="login-button-container">
-            <ButtonCreatePoll>Entrar</ButtonCreatePoll>
+            <ButtonCreatePoll onClick={handleLogin} disabled={isLoading}>
+              {isLoading ? "Entrando..." : "Entrar"}
+            </ButtonCreatePoll>
           </div>
         </div>
 
@@ -60,7 +99,10 @@ export function Login() {
 
         <div className="login-footer-container">
           <DescriptionText>
-            Nao possui uma conta? <span className="login-add">Registre-se</span>
+            Nao possui uma conta?{" "}
+            <span className="login-add" onClick={() => navigate("/register")}>
+              Registre-se
+            </span>
           </DescriptionText>
         </div>
       </div>
