@@ -54,3 +54,33 @@ export async function createPoll(question: string, options: string[], userId: nu
 
   return response.json()
 }
+
+export async function registerUser(name: string, email: string, password: string) {
+  const response = await fetch(`${API_BASE_URL}/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, password }),
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}))
+    throw new Error(errorData.message || 'Erro ao criar conta.')
+  }
+
+  return response.json()
+}
+
+export async function loginUser(email: string, password: string) {
+  const response = await fetch(`${API_BASE_URL}/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}))
+    throw new Error(errorData.message || 'E-mail ou senha inválidos.')
+  }
+
+  return response.json()
+}
