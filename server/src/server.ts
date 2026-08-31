@@ -16,7 +16,7 @@ import { usersRoutes } from './http/routes/users'
 const app = Fastify()
 
 app.register(cors, {
-  origin: true,
+  origin: ['https://quickcore.vercel.app'],
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS']
 })
 
@@ -32,6 +32,8 @@ app.register(registerRoutes)
 app.register(loginRoutes)
 app.register(usersRoutes)
 
-app.listen({ port: 3333 }).then(() => {
-  console.log('Servidor HTTP rodando em http://localhost:3333')
+const PORT = process.env.PORT ? Number(process.env.PORT) : 3333
+
+app.listen({ port: PORT, host: '0.0.0.0' }).then(() => {
+  console.log(`Servidor HTTP rodando na porta ${PORT}`)
 })
