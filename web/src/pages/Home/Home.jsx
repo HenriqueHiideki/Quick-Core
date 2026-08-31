@@ -1,15 +1,22 @@
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import "./home-style.css";
 import { DescriptionTitle } from "../../components/Description/DescriptionTitle";
 import { FilterTabs } from "../../components/FilterTabs/FilterTabs";
 import { Cards } from "../../components/Cards/Cards";
 import { getPolls } from "../../services/api";
+import { useAuth } from "../../contexts/AuthContext";
 
 export function Home() {
   const [polls, setPolls] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const socketsRef = useRef([]);
+  const { user } = useAuth();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get("q") || "";
+  const filter = searchParams.get("filter") || "all";
 
   useEffect(() => {
     getPolls()
@@ -26,7 +33,6 @@ export function Home() {
       });
   }, []);
 
-  // Conecta um WebSocket por enquete listada, pra atualizar os cards em tempo real
   useEffect(() => {
     socketsRef.current.forEach((ws) => ws.close());
     socketsRef.current = [];
@@ -63,27 +69,38 @@ export function Home() {
     };
   }, [polls.length]);
 
+  const handleFilterClick = (newFilter) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("filter", newFilter);
+    setSearchParams(newParams);
+  };
+
+  const filteredPolls = polls
+    .filter((poll) => {
+      if (filter === "mine") return poll.user_id === user?.id;
+      if (filter === "closed") return false;
+      return true;
+    })
+    .filter((poll) =>
+      poll.question.toLowerCase().includes(query.toLowerCase())
+    );
+
   return (
     <>
       <DescriptionTitle>Explore Tendências</DescriptionTitle>
 
       <div className="container-cards">
-        <FilterTabs>Todos</FilterTabs>
-        <FilterTabs>Ativos</FilterTabs>
-        <FilterTabs>Encerrados</FilterTabs>
-        <FilterTabs>Minhas enquetes</FilterTabs>
-        <FilterTabs>
-          <img
-            src="/icon-filter.png"
-            alt="icone de filtro"
-            className="button-img"
-          />
-          <img
-            src="/icon-filter-white.png"
-            alt="icone de filtro branco"
-            className="button-img-hover"
-          />
-          Filtro
+        <FilterTabs active={filter === "all"} onClick={() => handleFilterClick("all")}>
+          Todos
+        </FilterTabs>
+        <FilterTabs active={filter === "active"} onClick={() => handleFilterClick("active")}>
+          Ativos
+        </FilterTabs>
+        <FilterTabs active={filter === "closed"} onClick={() => handleFilterClick("closed")}>
+          Encerrados
+        </FilterTabs>
+        <FilterTabs active={filter === "mine"} onClick={() => handleFilterClick("mine")}>
+          Minhas enquetes
         </FilterTabs>
       </div>
 
@@ -92,14 +109,13 @@ export function Home() {
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        {!isLoading && !error && polls.length === 0 && (
+        {!isLoading && !error && filteredPolls.length === 0 && (
           <p>Nenhuma enquete encontrada.</p>
         )}
 
         {!isLoading &&
           !error &&
-          Array.isArray(polls) &&
-          polls.map((poll) => (
+          filteredPolls.map((poll) => (
             <Cards key={poll.id} poll={poll}>
               {poll.question}
             </Cards>

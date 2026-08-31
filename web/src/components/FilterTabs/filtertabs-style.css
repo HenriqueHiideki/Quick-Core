@@ -34,3 +34,8 @@
   background-color: var(--primary-color);
   color: #ffffff;
 }
+
+.filter-tab-active {
+  background-color: var(--primary-color, #2563eb);
+  color: white;
+}

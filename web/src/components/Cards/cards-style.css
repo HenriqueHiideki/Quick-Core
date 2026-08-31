@@ -1,5 +1,13 @@
+.container-cards{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 32px 24px 0 48px;
+}
+
 .cards{
-    min-height: 250px;
+    height: 280px;
     width: 100%;
     max-width: 320px;
     background-color: #ffffff;
@@ -8,6 +16,14 @@
     border: 1px solid #e5e7eb;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.cards:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
 }
 
 .cards-text{
