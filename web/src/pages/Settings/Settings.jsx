@@ -1,13 +1,52 @@
+import { useState, useEffect } from "react";
 import { DescriptionTitle } from "../../components/Description/DescriptionTitle";
 import { TitleVotes } from "../../components/Title/TitleVotes";
-import { Title } from "../../components/Title/Title";
 import "./settings-style.css";
 import { DescriptionText } from "../../components/Description/DescriptionText";
 import { ButtonCreatePoll } from "../../components/Button/Button-Create-Poll";
 import { CheckboxOption } from "../../components/CheckboxOption/CheckboxOption";
 import { FormField } from "../../components/FormField/FormField";
+import { useAuth } from "../../contexts/AuthContext";
+import { updateMe } from "../../services/api";
 
 export function Settings() {
+  const { user, updateUser } = useAuth();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [notifyUpdates, setNotifyUpdates] = useState(false);
+  const [notifyMarketing, setNotifyMarketing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [feedback, setFeedback] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name || "");
+      setEmail(user.email || "");
+    }
+  }, [user]);
+
+  const handleSave = async () => {
+    if (!name.trim() || !email.trim()) {
+      setFeedback("Preencha nome e e-mail.");
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+      setFeedback("");
+
+      const data = await updateMe(name, email);
+      updateUser(data.user);
+
+      setFeedback("Dados atualizados com sucesso!");
+    } catch (err) {
+      setFeedback(err.message);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="settings-container">
       <DescriptionTitle>Configuracoes</DescriptionTitle>
@@ -24,8 +63,8 @@ export function Settings() {
           </div>
 
           <div className="settings-actions">
-            <ButtonCreatePoll>Upload</ButtonCreatePoll>
-            <button className="button-secondary">Remover</button>
+            <ButtonCreatePoll disabled title="Em breve">Upload</ButtonCreatePoll>
+            <button className="button-secondary" disabled title="Em breve">Remover</button>
           </div>
         </div>
       </div>
@@ -35,8 +74,12 @@ export function Settings() {
         <hr />
 
         <div className="form-row">
-          <FormField label="First Name" placeholder="Digite seu nome" />
-          <FormField label="Last Name" placeholder="Digite seu sobrenome" />
+          <FormField
+            label="Nome completo"
+            placeholder="Digite seu nome"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
         </div>
       </div>
 
@@ -49,18 +92,33 @@ export function Settings() {
             label="Endereço de E-mail"
             type="email"
             placeholder="Digite seu E-mail"
-            helperText="Para alterar seu e-mail, contate o suporte."
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <div className="settings-checkboxes">
-            <CheckboxOption>
+            <CheckboxOption
+              checked={notifyUpdates}
+              onChange={(e) => setNotifyUpdates(e.target.checked)}
+            >
               Receber atualizações e resumos de enquetes
             </CheckboxOption>
-            <CheckboxOption>
+            <CheckboxOption
+              checked={notifyMarketing}
+              onChange={(e) => setNotifyMarketing(e.target.checked)}
+            >
               Receber e-mails de marketing e promocionais
             </CheckboxOption>
           </div>
         </div>
+      </div>
+
+      {feedback && <p style={{ marginTop: "16px", fontWeight: "bold" }}>{feedback}</p>}
+
+      <div style={{ marginTop: "16px" }}>
+        <ButtonCreatePoll onClick={handleSave} disabled={isSaving}>
+          {isSaving ? "Salvando..." : "Salvar alterações"}
+        </ButtonCreatePoll>
       </div>
     </div>
   );

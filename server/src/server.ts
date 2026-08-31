@@ -11,12 +11,13 @@ import { deletePollRoutes } from './http/routes/delete-poll'
 import { pollResults } from './http/websocket/poll-results'
 import { registerRoutes } from './http/routes/register'
 import { loginRoutes } from './http/routes/login'
+import { usersRoutes } from './http/routes/users'
 
 const app = Fastify()
 
 app.register(cors, {
   origin: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS']
 })
 
 app.register(websocket)
@@ -29,6 +30,7 @@ app.register(deletePollRoutes)
 app.register(pollResults)
 app.register(registerRoutes)
 app.register(loginRoutes)
+app.register(usersRoutes)
 
 app.listen({ port: 3333 }).then(() => {
   console.log('Servidor HTTP rodando em http://localhost:3333')

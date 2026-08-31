@@ -97,3 +97,36 @@ export async function loginUser(email: string, password: string) {
 
   return response.json()
 }
+
+export async function getMe() {
+  const token = localStorage.getItem('token')
+
+  const response = await fetch(`${API_BASE_URL}/users/me`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+
+  if (!response.ok) throw new Error('Erro ao buscar dados do usuário.')
+  return response.json()
+}
+
+export async function updateMe(name: string, email: string) {
+  const token = localStorage.getItem('token')
+
+  const response = await fetch(`${API_BASE_URL}/users/me`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ name, email }),
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}))
+    throw new Error(errorData.message || 'Erro ao atualizar dados.')
+  }
+
+  return response.json()
+}
