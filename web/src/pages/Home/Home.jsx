@@ -40,7 +40,8 @@ export function Home() {
     if (polls.length === 0) return;
 
     const sockets = polls.map((poll) => {
-      const ws = new WebSocket(`ws://localhost:3333/polls/${poll.id}/results`);
+      const WS_BASE_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:3333'
+      const ws = new WebSocket(`${WS_BASE_URL}/polls/${poll.id}/results`)
 
       ws.onmessage = (event) => {
         const { optionId, votes } = JSON.parse(event.data);

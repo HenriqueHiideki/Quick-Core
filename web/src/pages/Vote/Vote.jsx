@@ -27,7 +27,8 @@ export function Vote() {
   }, [pollId])
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://localhost:3333/polls/${pollId}/results`)
+    const WS_BASE_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:3333'
+    const ws = new WebSocket(`${WS_BASE_URL}/polls/${pollId}/results`)
 
     ws.onmessage = (event) => {
       const { optionId, votes } = JSON.parse(event.data)
