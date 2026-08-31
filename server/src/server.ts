@@ -16,7 +16,7 @@ import { usersRoutes } from './http/routes/users'
 const app = Fastify()
 
 app.register(cors, {
-  origin: ['https://quickcore.vercel.app'],
+  origin: ['https://quick-core.vercel.app'],
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS']
 })
 
